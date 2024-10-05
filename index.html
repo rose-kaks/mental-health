@@ -41,6 +41,7 @@
     <button onclick="completeTask('meditation')">Complete Meditation</button>
     <button onclick="completeTask('exercise')">Complete Exercise</button>
     <button onclick="completeTask('journaling')">Complete Journaling</button>
+    <button onclick="resetProgress()">Reset</button>
 </div>
 
 <!-- 3D Scene with A-Frame -->
@@ -68,7 +69,7 @@
 
     // Fetch user progress from the backend
     function fetchProgress() {
-        fetch('http://localhost:3001/progress')
+        fetch('http://localhost:3000/progress')
             .then(response => response.json())
             .then(data => {
                 tasksCompleted = data.tasksCompleted;
@@ -89,7 +90,7 @@
 
     // Function to simulate task completion and send update to the backend
     function completeTask(taskType) {
-        fetch('http://localhost:3001/complete-task', {
+        fetch('http://localhost:3000/complete-task', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -131,9 +132,32 @@
         document.getElementById('zen-flower').setAttribute('visible', 'true');
     }
 
+    function resetProgress() {
+        fetch('http://localhost:3000/reset-progress', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        })
+        .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+        })
+        .then(data => {
+        document.getElementById('tasksCompleted').textContent = data.tasksCompleted;
+        document.getElementById('points').textContent = data.points;
+          alert('Progress has been reset!'); // Optional feedback
+        })
+        .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+        });
+    }
+
     // Fetch progress on page load
     window.onload = fetchProgress;
 </script>
-
+<script href="./zen-mental-health/index.js"></script>
 </body>
 </html>

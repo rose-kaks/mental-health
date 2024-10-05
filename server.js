@@ -1,5 +1,3 @@
-// server.js
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -54,8 +52,17 @@ app.post('/complete-task', (req, res) => {
     res.json(userProgress);
 });
 
-// Listen on port 3001
-const PORT = process.env.PORT || 3001;
+// Reset progress route
+app.post('/reset-progress', (req, res) => {
+    userProgress.tasksCompleted = 0;
+    userProgress.points = 0;
+
+    // Respond with the reset progress
+    res.json(userProgress);
+});
+
+// Listen on port 3000
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
